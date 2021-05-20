@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState }  from 'react';
-import {  Button, SafeAreaView, Alert ,StyleSheet, TextInput, Text, View } from 'react-native';
+import {  Button, SafeAreaView, Alert ,StyleSheet, TextInput, Text, View, FlatList } from 'react-native';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
 const HomeScreen = ({ navigation }) => {
+  let [roomCode, setRoomCode] = useState('');
   let [user, setUser] = useState('');
   return (
     <View style={styles.container}>
@@ -14,6 +15,15 @@ const HomeScreen = ({ navigation }) => {
       <TextInput
         style={{height: 40}}
         placeholder="Room code"
+        onChangeText={roomCode => setRoomCode(roomCode)}
+        defaultValue={roomCode}
+      />
+      
+    </View>
+    <View style={{padding: 10}}>
+      <TextInput
+        style={{height: 40}}
+        placeholder="Your Name"
         onChangeText={user => setUser(user)}
         defaultValue={user}
       />
@@ -22,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
     <Button
       title="Create Room"
       onPress={() =>
-        navigation.navigate('Profile', { name: user })
+        navigation.navigate('Profile', { roomCode : roomCode, name: user })
       }
     />
   <Button
@@ -35,7 +45,16 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 const ProfileScreen = ({ navigation, route }) => {
-  return <Text>This is {route.params.name}'s profile</Text>;
+  return (<View>
+    
+    <Text>Room Code : {route.params.roomCode}</Text>
+    <Text>Members</Text>
+    
+    
+      <li>{route.params.name}</li>
+    
+  
+  </View>);
 };
 
 const Stack = createStackNavigator();
