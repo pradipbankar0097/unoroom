@@ -30,6 +30,18 @@ export default function App() {
   const [text, setText] = useState('');
   return (
     <NavigationContainer>
+      {/*navigation */}
+    <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Welcome' }}
+        />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+
+        </Stack.Navigator>
+
+        
     <View style={styles.container}>
       <View style={{padding: 10}}>
       <TextInput
@@ -54,15 +66,8 @@ export default function App() {
       
     </View>
 
-    {/*navigation */}
-    <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Welcome' }}
-        />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-      </Stack.Navigator>
+    
+      
     </NavigationContainer>
   );
 }
