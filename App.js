@@ -7,13 +7,31 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 const HomeScreen = ({ navigation }) => {
+  let [user, setUser] = useState('');
   return (
+    <View style={styles.container}>
+      <View style={{padding: 10}}>
+      <TextInput
+        style={{height: 40}}
+        placeholder="Room code"
+        onChangeText={user => setUser(user)}
+        defaultValue={user}
+      />
+      
+    </View>
     <Button
-      title="Go to Jane's profile"
+      title="Create Room"
+      onPress={() =>
+        navigation.navigate('Profile', { name: user })
+      }
+    />
+  <Button
+      title="Join"
       onPress={() =>
         navigation.navigate('Profile', { name: 'Jane' })
       }
     />
+    </View>
   );
 };
 const ProfileScreen = ({ navigation, route }) => {
@@ -41,31 +59,8 @@ export default function App() {
 
         </Stack.Navigator>
 
-        
-    <View style={styles.container}>
-      <View style={{padding: 10}}>
-      <TextInput
-        style={{height: 40}}
-        placeholder="Room code"
-        onChangeText={text => setText(text)}
-        defaultValue={text}
-      />
-      
-    </View>
-
-{/* button */}
-<Button
-        title="Create Room"
-        onPress={() => Alert.alert('Simple Button pressed')}
-      />
-      
-<Button
-        title="Join Room"
-        onPress={() => Alert.alert('Simple Button pressed')}
-      />
-      
-    </View>
-
+  
+    
     
       
     </NavigationContainer>
