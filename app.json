@@ -1,0 +1,12 @@
+{
+  "name": "unoroom",
+  "displayName": "unoroom",
+  "expo": {
+    "name": "unoroom",
+    "slug": "unoroom",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
