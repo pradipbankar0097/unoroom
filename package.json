@@ -4,7 +4,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "build": "expo build:web"
   },
   "dependencies": {
     "expo": "~41.0.1",
@@ -23,6 +24,7 @@
     "@react-native-community/masked-view": "0.1.10"
   },
   "devDependencies": {
+    "expo-cli": "^4.0.16",
     "@babel/core": "^7.9.0"
   },
   "private": true
