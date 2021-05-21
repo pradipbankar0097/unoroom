@@ -67,19 +67,43 @@ const HomeScreen = ({ navigation }) => {
 
 const ProfileScreen = ({ navigation, route }) => {
   var members = [];
+  let [players, setPlayers] = useState([]);
   var i=0;
   members.push(
-    <View key={++i}>
-      <Text>{route.params.name}</Text>
-    </View>
+    
+    
+      route.params.name+'\n'
+    
   );
+  var room = db.ref(route.params.roomCode);
+  var member = room.child('members/'+route.params.name)
+  member.set({
+    present : true,
+  });
+  var all = '';
+  room.on("value", function(snapshot, prevChildKey) {
+    console.log(snapshot.val());
+    console.log(snapshot.val()['members']['aman']);
+    for (const i in snapshot.val()['members']) {
+      console.log(i);
+      players.push(
+    
+        <View key={500+i}>
+          <Text>{i}</Text>
+        </View>
+      );
+
+    }
+    console.log(players);
+  });
+
   return (<View>
     
     <Text>Room Code : {route.params.roomCode}</Text>
     <Text>Members : </Text>
-    <View>
-      {members}
-    </View>
+    <>
+      {players}
+    </>
     
       {/* <text>{route.params.name}</text> */}
     
