@@ -4,6 +4,24 @@ import {  Button, SafeAreaView, Alert ,StyleSheet, TextInput, Text, View, FlatLi
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Homes from './rooms/Home';
+
+// Firebase App (the core Firebase SDK) is always required and must be listed first
+import firebase from "firebase/app";
+// If you are using v7 or any earlier version of the JS SDK, you should import firebase using namespace import
+// import * as firebase from "firebase/app"
+
+// If you enabled Analytics in your project, add the Firebase SDK for Analytics
+import "firebase/analytics";
+
+// Add the Firebase products that you want to use
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/database";
+import { firebaseConfig } from './config';
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
 
 
 const HomeScreen = ({ navigation }) => {
@@ -12,6 +30,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={{padding: 10}}>
+      
       <TextInput
         style={{height: 40}}
         placeholder="Room code"
@@ -31,9 +50,8 @@ const HomeScreen = ({ navigation }) => {
     </View>
     <Button
       title="Create Room"
-      onPress={() =>
-        navigation.navigate('Profile', { roomCode : roomCode, name: user })
-      }
+      onPress={() =>{
+        navigation.navigate('Profile', { roomCode : roomCode, name: user })}}
     />
   <Button
       title="Join"
@@ -41,17 +59,29 @@ const HomeScreen = ({ navigation }) => {
         navigation.navigate('Profile', { name: 'Jane' })
       }
     />
+    
     </View>
   );
 };
+
+
 const ProfileScreen = ({ navigation, route }) => {
+  var members = [];
+  var i=0;
+  members.push(
+    <View key={++i}>
+      <Text>{route.params.name}</Text>
+    </View>
+  );
   return (<View>
     
     <Text>Room Code : {route.params.roomCode}</Text>
-    <Text>Members</Text>
+    <Text>Members : </Text>
+    <View>
+      {members}
+    </View>
     
-    
-      <li>{route.params.name}</li>
+      {/* <text>{route.params.name}</text> */}
     
   
   </View>);
@@ -96,3 +126,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
