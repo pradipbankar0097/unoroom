@@ -1,10 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState }  from 'react';
-import {  Button, SafeAreaView, Alert ,StyleSheet, TextInput, Text, View, FlatList } from 'react-native';
+import { useEffect,AsyncStorage, Button, SafeAreaView, Alert ,StyleSheet, TextInput, Text, View, FlatList } from 'react-native';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Homes from './rooms/Home';
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from "firebase/app";
@@ -23,10 +22,9 @@ import { firebaseConfig } from './config';
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
-
 const HomeScreen = ({ navigation }) => {
-  let [roomCode, setRoomCode] = useState('');
-  let [user, setUser] = useState('');
+  let [roomCode, setRoomCode] = useState('abcd');
+  let [user, setUser] = useState('aman');
   return (
     <View style={styles.container}>
       <View style={{padding: 10}}>
@@ -50,8 +48,7 @@ const HomeScreen = ({ navigation }) => {
     </View>
     <Button
       title="Create Room"
-      onPress={() =>{
-        navigation.navigate('Profile', { roomCode : roomCode, name: user })}}
+      onPress={() => {navigation.navigate('Profile', { roomCode : roomCode, name: user })}}
     />
   <Button
       title="Join"
@@ -81,11 +78,10 @@ const ProfileScreen = ({ navigation, route }) => {
     present : true,
   });
   var all = '';
+  
+    
   room.on("value", function(snapshot, prevChildKey) {
-    console.log(snapshot.val());
-    console.log(snapshot.val()['members']['aman']);
     for (const i in snapshot.val()['members']) {
-      console.log(i);
       players.push(
     
         <View key={500+i}>
@@ -96,13 +92,14 @@ const ProfileScreen = ({ navigation, route }) => {
     }
     console.log(players);
   });
-
+  
   return (<View>
     
     <Text>Room Code : {route.params.roomCode}</Text>
     <Text>Members : </Text>
     <>
-      {players}
+      
+  {players}
     </>
     
       {/* <text>{route.params.name}</text> */}
