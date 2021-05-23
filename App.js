@@ -22,6 +22,7 @@ import { firebaseConfig } from './config';
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
+
 const HomeScreen = ({ navigation }) => {
   let [roomCode, setRoomCode] = useState('abcd');
   let [user, setUser] = useState('aman');
@@ -47,15 +48,15 @@ const HomeScreen = ({ navigation }) => {
       
     </View>
     <Button
-      title="Create Room"
+      title="Create Room OR Join"
       onPress={() => {navigation.navigate('Profile', { roomCode : roomCode, name: user })}}
     />
-  <Button
+  {/* <Button
       title="Join"
       onPress={() =>
         navigation.navigate('Profile', { name: 'Jane' })
       }
-    />
+    /> */}
     
     </View>
   );
@@ -63,35 +64,44 @@ const HomeScreen = ({ navigation }) => {
 
 
 const ProfileScreen = ({ navigation, route }) => {
-  var members = [];
-  let [players, setPlayers] = useState([]);
-  var i=0;
-  members.push(
-    
-    
-      route.params.name+'\n'
-    
-  );
   var room = db.ref(route.params.roomCode);
-  var member = room.child('members/'+route.params.name)
+  var member = room.child('members/'+route.params.name);
+
+  var members = []
+  var temp = ''
+  var [players, setPlayers] = useState(() =>{
+    console.log('refresh called')
+    var membs = []
+    room.child('members').on('value', (data) => {
+      for (var i in data.val()){
+        membs.push({
+          key:i
+        })
+      }
+    });
+    return membs
+  })
+ 
+  var i=0;
+  members.push(route.params.name+'\n');
   member.set({
     present : true,
   });
   var all = '';
   
-    
-  room.on("value", function(snapshot, prevChildKey) {
-    for (const i in snapshot.val()['members']) {
-      players.push(
-    
-        <View key={500+i}>
-          <Text>{i}</Text>
-        </View>
-      );
-
+    var i=0;
+    function refreshmembers() {
+      console.log('refresh called')
+      var membs = []
+      room.child('members').on('value', (data) => {
+        for (var i in data.val()){
+          membs.push({
+            key:i
+          })
+        }
+      });
+      return membs
     }
-    console.log(players);
-  });
   
   return (<View>
     
@@ -99,12 +109,21 @@ const ProfileScreen = ({ navigation, route }) => {
     <Text>Members : </Text>
     <>
       
-  {players}
+  
     </>
-    
+    <FlatList
+        data={players}
+        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+      />
       {/* <text>{route.params.name}</text> */}
     
-  
+      <Button
+        title="Refresh"
+        onPress={() => {
+          
+          setPlayers(refreshmembers)
+        }}
+      />
   </View>);
 };
 
@@ -116,6 +135,7 @@ const Separator = () => (
 
 export default function App() {
   const [text, setText] = useState('');
+  
   return (
     <NavigationContainer>
       {/*navigation */}
