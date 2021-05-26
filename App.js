@@ -13,6 +13,8 @@ import { useListKeys } from 'react-firebase-hooks/database';
 import { firebaseConfig } from './config';
 
 import {Game} from './screens/Game';
+import Card from './assets/components/Card'
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
@@ -22,6 +24,8 @@ const HomeScreen = ({ navigation }) => {
   let [user, setUser] = useState('');
   return (
     <View style={styles.container}>
+
+    
       <View style={{padding: 10}}>
       
       <TextInput
@@ -61,7 +65,14 @@ const ProfileScreen = ({ navigation, route }) => {
   })
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
   
-  return (<View>
+  return (<View 
+            style={
+              {
+                backgroundColor:'white',
+                
+              }
+            }
+            >
     
     <Text>Room Code : {route.params.roomCode}</Text>
 
@@ -136,6 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    height:'100%',
   },
   normalbutton:{
     width:100,
