@@ -1,31 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState }  from 'react';
-import { useEffect,AsyncStorage, Button, SafeAreaView, Alert ,StyleSheet, TextInput, Text, View, FlatList } from 'react-native';
+import { useEffect,AsyncStorage, Button, SafeAreaView, Alert ,
+  StyleSheet, TextInput, Text, View, FlatList, ScrollView } from 'react-native';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-// Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from "firebase/app";
-// If you are using v7 or any earlier version of the JS SDK, you should import firebase using namespace import
-// import * as firebase from "firebase/app"
-
-// If you enabled Analytics in your project, add the Firebase SDK for Analytics
-import "firebase/analytics";
-
-// Add the Firebase products that you want to use
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
 import { useListKeys } from 'react-firebase-hooks/database';
-
 import { firebaseConfig } from './config';
 
-import { NativeViewGestureHandler } from 'react-native-gesture-handler';
+import {Game} from './screens/Game';
 
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
-
 
 const HomeScreen = ({ navigation }) => {
   let [roomCode, setRoomCode] = useState('');
@@ -55,12 +45,6 @@ const HomeScreen = ({ navigation }) => {
       title="Create Room OR Join"
       onPress={() => {navigation.navigate('Profile', { roomCode : roomCode, name: user })}}
     />
-  {/* <Button
-      title="Join"
-      onPress={() =>
-        navigation.navigate('Profile', { name: 'Jane' })
-      }
-    /> */}
     
     </View>
   );
@@ -72,24 +56,40 @@ const ProfileScreen = ({ navigation, route }) => {
 
   var room = db.ref(route.params.roomCode);
   var member = room.child('members/'+route.params.name);
+  member.set({
+    present:true
+  })
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
   
   return (<View>
     
     <Text>Room Code : {route.params.roomCode}</Text>
+
+    <Button 
+      style={styles.normalbutton}
+     title="PLAY" onPress={()=>{navigation.navigate('Game')}} />
     <Text>Members : </Text>
     <>
-    {error && <strong>Error: {error}</strong>}
-        {loading && <span>Loading...</span>}
+    {error && <Text>Error: {error}</Text>}
+        {loading && <Text>Loading...</Text>}
         {!loading && playerkeys && (
-          <React.Fragment>
-            <View>
-              {' '}
+          
+            <ScrollView>
               {playerkeys.map((v) => (
-                <View>{v}</View>
+                <View key={v} 
+                style={{
+                  padding:10,
+                  backgroundColor:'rgb(255,255,240)',
+                  borderWidth:'thin',
+                  borderBottomColor:'#fff9'
+                }}><Text
+                style={{
+                  display:'flex',
+                  
+                }}>{v}</Text></View>
               ))}
-            </View>
-          </React.Fragment>
+            </ScrollView>
+          
         )}
   
     </>
@@ -108,7 +108,7 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      {/*navigation */}
+      
     <Stack.Navigator>
         <Stack.Screen
           name="Home"
@@ -116,6 +116,7 @@ export default function App() {
           options={{ title: 'Welcome' }}
         />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Game" component={Game} />
 
         </Stack.Navigator>
 
@@ -136,6 +137,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  normalbutton:{
+    width:100,
+    backgroundColor: 'rgb(22,200,200)',
+
+  }
 });
 
 
