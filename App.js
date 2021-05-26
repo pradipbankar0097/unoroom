@@ -17,15 +17,19 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
+import { useListKeys } from 'react-firebase-hooks/database';
+
 import { firebaseConfig } from './config';
+
+import { NativeViewGestureHandler } from 'react-native-gesture-handler';
 
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
 
 const HomeScreen = ({ navigation }) => {
-  let [roomCode, setRoomCode] = useState('abcd');
-  let [user, setUser] = useState('aman');
+  let [roomCode, setRoomCode] = useState('');
+  let [user, setUser] = useState('');
   return (
     <View style={styles.container}>
       <View style={{padding: 10}}>
@@ -64,66 +68,32 @@ const HomeScreen = ({ navigation }) => {
 
 
 const ProfileScreen = ({ navigation, route }) => {
+  
+
   var room = db.ref(route.params.roomCode);
   var member = room.child('members/'+route.params.name);
-
-  var members = []
-  var temp = ''
-  var [players, setPlayers] = useState(() =>{
-    console.log('refresh called')
-    var membs = []
-    room.child('members').on('value', (data) => {
-      for (var i in data.val()){
-        membs.push({
-          key:i
-        })
-      }
-    });
-    return membs
-  })
- 
-  var i=0;
-  members.push(route.params.name+'\n');
-  member.set({
-    present : true,
-  });
-  var all = '';
-  
-    var i=0;
-    function refreshmembers() {
-      console.log('refresh called')
-      var membs = []
-      room.child('members').on('value', (data) => {
-        for (var i in data.val()){
-          membs.push({
-            key:i
-          })
-        }
-      });
-      return membs
-    }
+  const [playerkeys, loading, error] = useListKeys(room.child('members'));
   
   return (<View>
     
     <Text>Room Code : {route.params.roomCode}</Text>
     <Text>Members : </Text>
     <>
-      
+    {error && <strong>Error: {error}</strong>}
+        {loading && <span>Loading...</span>}
+        {!loading && playerkeys && (
+          <React.Fragment>
+            <View>
+              {' '}
+              {playerkeys.map((v) => (
+                <View>{v}</View>
+              ))}
+            </View>
+          </React.Fragment>
+        )}
   
     </>
-    <FlatList
-        data={players}
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-      />
-      {/* <text>{route.params.name}</text> */}
     
-      <Button
-        title="Refresh"
-        onPress={() => {
-          
-          setPlayers(refreshmembers)
-        }}
-      />
   </View>);
 };
 
