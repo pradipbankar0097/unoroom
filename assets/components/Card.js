@@ -4,16 +4,16 @@ import {View,Text} from 'react-native'
 
 export default class Card extends Component {
     static propTypes = {
-        prop: PropTypes,
-        
+        height: PropTypes.string,
+        width: PropTypes.string
     }
 
     render() {
         return (
             <View 
       style={{
-        width:100,
-        height: 160,
+        width:this.props.width,
+        height: this.props.height,
         backgroundColor:'white',
         borderRadius:10,
         padding:5,

@@ -12,16 +12,17 @@ import "firebase/database";
 import { useListKeys } from 'react-firebase-hooks/database';
 import { firebaseConfig } from './config';
 
-import {Game} from './screens/Game';
-import Card from './assets/components/Card'
+import Game from './screens/Game';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
+var roomcodetopass ;
 const HomeScreen = ({ navigation }) => {
   let [roomCode, setRoomCode] = useState('');
   let [user, setUser] = useState('');
+  roomcodetopass = roomCode;
   return (
     <View style={styles.container}>
 
@@ -59,6 +60,7 @@ const ProfileScreen = ({ navigation, route }) => {
   
 
   var room = db.ref(route.params.roomCode);
+  var roomCode = route.params.roomCode.toString();
   var member = room.child('members/'+route.params.name);
   member.set({
     present:true
@@ -78,7 +80,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
     <Button 
       style={styles.normalbutton}
-     title="PLAY" onPress={()=>{navigation.navigate('Game')}} />
+     title="PLAY" onPress={()=>{navigation.navigate('Game', { db: db,roomCode : roomCode})}} />
     <Text>Members : </Text>
     <>
     {error && <Text>Error: {error}</Text>}
@@ -96,7 +98,6 @@ const ProfileScreen = ({ navigation, route }) => {
                 }}><Text
                 style={{
                   display:'flex',
-                  
                 }}>{v}</Text></View>
               ))}
             </ScrollView>
@@ -107,6 +108,18 @@ const ProfileScreen = ({ navigation, route }) => {
     
   </View>);
 };
+
+const GameScreen = ({ navigation, route }) => {
+  
+
+  var roomCode = route.params.roomCode;
+  
+  
+  return (
+    <Game db={route.params.db} roomCode={roomCode} />
+  );
+};
+ 
 
 const Stack = createStackNavigator();
 
@@ -120,21 +133,14 @@ export default function App() {
   return (
     <NavigationContainer>
       
-    <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Welcome' }}
-        />
+      <Stack.Navigator>
+
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Game" component={Game} />
+        <Stack.Screen name="Game"  component={GameScreen} />
 
-        </Stack.Navigator>
+      </Stack.Navigator>
 
-  
-    
-    
-      
     </NavigationContainer>
   );
 }
