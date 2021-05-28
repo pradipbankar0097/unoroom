@@ -55,9 +55,9 @@ for (let i = deck.length - 1; i > 0; i--) {
 }
 
 //shuffled deck ready
-const members = store.collection(props.roomCode).doc('cards');
+const cards = store.collection(props.roomCode).doc('cards');
 
-members.set({
+cards.set({
   cardstock: deck
 });
 
@@ -74,8 +74,10 @@ members.set({
 
    var room = props.db.ref(props.roomCode);
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
-   const [cardsarray, loadingc, errorc] = useDocumentData(store.collection(props.roomCode).doc('cards'))
-   console.log(cardsarray)
+   const [cardsarray, loadingc, errorc] = useDocumentData(cards)
+   
+   
+
         return (
             <View
                 style={
@@ -133,12 +135,10 @@ members.set({
                             boxShadow:'inset 0 0 10px #000000',
                         }}
                     >
-                    {
-                        deck.map((card)=>{
-                            <Card height='75px' width='50px' cardcolor={card.cardcolor} cardnumber={card.cardnumber}/>
-                        }
-                        )
-                    }
+                    
+                        
+                            <Card height='75px' width='50px' cardcolor='red' cardnumber='2'/>
+                    
                     
                     </ScrollView>
                 
