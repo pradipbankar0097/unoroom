@@ -13,9 +13,69 @@ import { firebaseConfig } from '../config';
 function Game(props) {
 
    var store = firebase.firestore()
+
+    //
+    // program to shuffle the deck of cards
+
+// declare card elements
+const suits = ["#fc1c03", "#1298ff", "#15e83f", "#fffb00"];
+const values = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "🚫",
+  "🔁",
+  "+2",
+  "+4",
+];
+
+// empty array to contain cards
+let deck = [];
+
+// create a deck of cards
+for (let i = 0; i < suits.length; i++) {
+    for (let x = 0; x < values.length; x++) {
+        let card = { cardnumber: values[x], cardcolor: suits[i] };
+        deck.push(card);
+    }
+}
+deck = deck.concat(deck)
+// shuffle the cards
+for (let i = deck.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i);
+    let temp = deck[i];
+    deck[i] = deck[j];
+    deck[j] = temp;
+}
+
+//shuffled deck ready
+const members = store.collection(props.roomCode).doc('cards');
+
+members.set({
+  cardstock: deck
+});
+
+
+// display 5 results
+// for (let i = 0; i < 5; i++) {
+//     console.log(`${deck[i].Suit} ${deck[i].Value}`)
+// }
+
+// for (let i = 0; i < deck.length; i++) {
+//     console.log(`${deck[i].Suit} ${deck[i].Value}`)
+// }
+    //
+
    var room = props.db.ref(props.roomCode);
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
-  
+   const [cardsarray, loadingc, errorc] = useDocumentData(store.collection(props.roomCode).doc('cards'))
+   console.log(cardsarray)
         return (
             <View
                 style={
@@ -73,34 +133,12 @@ function Game(props) {
                             boxShadow:'inset 0 0 10px #000000',
                         }}
                     >
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
-                    <Card height='80px' width='50px'/>
+                    {
+                        deck.map((card)=>{
+                            <Card height='75px' width='50px' cardcolor={card.cardcolor} cardnumber={card.cardnumber}/>
+                        }
+                        )
+                    }
                     
                     </ScrollView>
                 
