@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes,{defaultProps} from 'prop-types'
 import {View,Text} from 'react-native'
 
 export default class Card extends Component {
     static propTypes = {
         height: PropTypes.string,
-        width: PropTypes.string
+        width: PropTypes.string,
+        cardcolor: PropTypes.string,
+        cardnumber: PropTypes.string
+    }
+    static defaultProps ={
+      cardcolor : 'red',
+      cardnumber: '2'
     }
 
     render() {
@@ -27,7 +33,7 @@ export default class Card extends Component {
       style={{
         width:'100%',
         height: '100%',
-        backgroundColor:'red',
+        backgroundColor:this.props.cardcolor,
         borderRadius:10,
         padding:10,
         display:'flex',
@@ -40,7 +46,7 @@ export default class Card extends Component {
           color:'white',
           fontWeight:'bold'
         }}
-      >2</Text>
+      >{this.props.cardnumber}</Text>
       <View
         style={{
           height:'70%',
@@ -56,16 +62,16 @@ export default class Card extends Component {
           style={{
             fontSize:50,
             fontWeight:'bold',
-            color:'red'
+            color:this.props.cardcolor
           }}
-        >2</Text>
+        >{this.props.cardnumber}</Text>
       </View>
       <Text
         style={{
           color:'white',
           fontWeight:'bold'
         }}
-      >2</Text>
+      >{this.props.cardnumber}</Text>
     </View>
     </View>
         )

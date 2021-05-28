@@ -8,11 +8,12 @@ import "firebase/database";
 import { useListKeys } from 'react-firebase-hooks/database';
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Card from '../assets/components/Card'
+import { firebaseConfig } from '../config';
 
 function Game(props) {
-    
+
+   var store = firebase.firestore()
    var room = props.db.ref(props.roomCode);
-  
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
   
         return (
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
 });
 
 Game.propTypes = {
+        firebase: PropTypes.instanceOf(firebase),
         db : PropTypes.instanceOf(firebase.database.Database),
         roomCode : PropTypes.string
     }
