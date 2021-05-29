@@ -49,44 +49,33 @@ const HomeScreen = ({ navigation }) => {
       
     </View>
     <Button
-      title="Create Room OR Join"
-      onPress={() => {navigation.navigate('Profile', { roomCode : roomCode, name: user })}}
+      title="Create Room"
+      onPress={() => {navigation.navigate('Profile', {owner:true, roomCode : roomCode, name: user })}}
     />
-    
+    <Button
+      title="Join"
+      onPress={() => {navigation.navigate('Profile', {owner:false, roomCode : roomCode, name: user })}}
+    />
     </View>
   );
 };
 
 
 const ProfileScreen = ({ navigation, route }) => {
-  //temp
 
- //
-    // program to shuffle the deck of cards
+  var room = db.ref(route.params.roomCode);
+  var roomCode = route.params.roomCode.toString();
+  var member = room.child('members/'+route.params.name);
+  member.set({
+    present:true
+  })
+  if(route.params.owner == true){
 
-// declare card elements
+// program to shuffle the deck of cards
 // const suits = ["#fc1c03", "#1298ff", "#15e83f", "#fffb00"];
 const suits = ["red", "blue", "green", "yellow"];
-const values = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "🚫",
-  "🔁",
-  "+2",
-  "+4",
-];
-
-// empty array to contain cards
+const values = ["1","2","3","4","5","6","7","8","9","🚫","🔁","+2","+4",];
 let deck = [];
-
-// create a deck of cards
 for (let i = 0; i < suits.length; i++) {
     for (let x = 0; x < values.length; x++) {
         let card = { cardnumber: values[x], cardcolor: suits[i] };
@@ -126,13 +115,14 @@ var room = db.ref(route.params.roomCode);
 
   //tempend
 
-  var room = db.ref(route.params.roomCode);
-  var roomCode = route.params.roomCode.toString();
-  var member = room.child('members/'+route.params.name);
-  member.set({
-    present:true
-  })
 
+     room.child('metadata').set({
+        totalmembers:1,
+        cardstaken:6,
+        owner:route.params.name,
+
+     })
+  }
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
   
   return (<View 
