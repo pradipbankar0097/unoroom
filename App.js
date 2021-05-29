@@ -72,7 +72,6 @@ const ProfileScreen = ({ navigation, route }) => {
   if(route.params.owner == true){
 
 // program to shuffle the deck of cards
-// const suits = ["#fc1c03", "#1298ff", "#15e83f", "#fffb00"];
 const suits = ["red", "blue", "green", "yellow"];
 const values = ["1","2","3","4","5","6","7","8","9","🚫","🔁","+2","+4",];
 let deck = [];
