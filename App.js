@@ -60,7 +60,8 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-
+var metadataupdated = false;
+var cardtopick = 0;
 const ProfileScreen = ({ navigation, route }) => {
 
   var room = db.ref(route.params.roomCode);
@@ -69,7 +70,11 @@ const ProfileScreen = ({ navigation, route }) => {
   member.set({
     present:true
   })
+  
+  //if the logged in user is creator
   if(route.params.owner == true){
+    
+    if(!metadataupdated){
 
 // program to shuffle the deck of cards
 const suits = ["red", "blue", "green", "yellow"];
@@ -121,6 +126,21 @@ var room = db.ref(route.params.roomCode);
         owner:route.params.name,
 
      })
+     metadataupdated=true;
+  
+  }
+  }
+
+  else{
+    
+    if(!metadataupdated){
+    console.log('in else')
+    room.child('metadata').update({
+      cardstaken:firebase.database.ServerValue.increment(6),
+      totalmembers: firebase.database.ServerValue.increment(1)
+    })
+    metadataupdated=true;
+    }
   }
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
   
