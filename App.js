@@ -18,7 +18,7 @@ import Card from './assets/components/Card'
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
+export var db = firebase.database();
 
 var roomcodetopass ;
 const HomeScreen = ({ navigation }) => {
@@ -59,7 +59,72 @@ const HomeScreen = ({ navigation }) => {
 
 
 const ProfileScreen = ({ navigation, route }) => {
-  
+  //temp
+
+ //
+    // program to shuffle the deck of cards
+
+// declare card elements
+// const suits = ["#fc1c03", "#1298ff", "#15e83f", "#fffb00"];
+const suits = ["red", "blue", "green", "yellow"];
+const values = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "🚫",
+  "🔁",
+  "+2",
+  "+4",
+];
+
+// empty array to contain cards
+let deck = [];
+
+// create a deck of cards
+for (let i = 0; i < suits.length; i++) {
+    for (let x = 0; x < values.length; x++) {
+        let card = { cardnumber: values[x], cardcolor: suits[i] };
+        deck.push(card);
+    }
+}
+deck = deck.concat(deck)
+// shuffle the cards
+for (let i = deck.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i);
+    let temp = deck[i];
+    deck[i] = deck[j];
+    deck[j] = temp;
+}
+
+//shuffled deck ready
+// const cards = store.collection(props.roomCode).doc('cards');
+
+// cards.set({
+//   cardstock: deck
+// });
+
+
+// display 5 results
+// for (let i = 0; i < 5; i++) {
+//     console.log(`${deck[i].Suit} ${deck[i].Value}`)
+// }
+var room = db.ref(route.params.roomCode);
+ for (let i = 0; i < deck.length; i++) {
+//     console.log(`${deck[i].cardcolor} ${deck[i].cardnumber}`)
+        room.child('cards/'+i.toString()).set({
+            cardcolor:deck[i].cardcolor,
+            cardnumber:deck[i].cardnumber
+        })
+ }
+   
+
+  //tempend
 
   var room = db.ref(route.params.roomCode);
   var roomCode = route.params.roomCode.toString();
@@ -67,6 +132,7 @@ const ProfileScreen = ({ navigation, route }) => {
   member.set({
     present:true
   })
+
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
   
   return (<View 
@@ -114,11 +180,11 @@ const ProfileScreen = ({ navigation, route }) => {
 const GameScreen = ({ navigation, route }) => {
   
 
-  var roomCode = route.params.roomCode;
+  const roomCode = route.params.roomCode;
   
   
   return (
-    <Game db={route.params.db} roomCode={roomCode} />
+    <Game roomCode={roomCode} />
   );
 };
  

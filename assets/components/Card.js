@@ -7,14 +7,16 @@ export default class Card extends Component {
         height: PropTypes.string,
         width: PropTypes.string,
         cardcolor: PropTypes.string,
-        cardnumber: PropTypes.string
+        cardnumber: PropTypes.string,
+        
     }
     static defaultProps ={
       cardcolor : 'red',
       cardnumber: '2'
     }
-
+    
     render() {
+      
         return (
             <View 
       style={{
