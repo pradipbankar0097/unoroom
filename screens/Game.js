@@ -5,10 +5,10 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
-import { useListKeys,useListVals } from 'react-firebase-hooks/database';
+import { useListKeys,useListVals,useObject } from 'react-firebase-hooks/database';
 import { useList } from 'react-firebase-hooks/database';
 import {useDocumentData} from 'react-firebase-hooks/firestore'
-import Card from '../assets/components/Card'
+import Card from '../assets/Card'
 import { firebaseConfig } from '../config';
 import {db,myname,mycardnumber} from '../App'
 
@@ -21,7 +21,7 @@ function Game(props) {
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
    //const [cardsarray, loadingc, errorc] = useDocumentData(cards)
    const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
-   
+   const [maincard,loadingmaincard,errormaincard] = useObject(room.child('maincard/card'))
    
 
         return (
@@ -68,7 +68,12 @@ function Game(props) {
                         alignItems:'center',
                     }}
                 >
-                    <Text>middle</Text>
+                    <View>
+                    {errormaincard && <strong>Error: {error}</strong>}
+                    {loadingmaincard && <span>Card Loading...</span>}
+                    {maincard && <Card height='90%' cardcolor={maincard.val()['cardcolor']} cardnumber={maincard.val()['cardnumber']} />}
+                    
+                    </View>
                 </View>
                 <ScrollView
                         horizontal={true}
@@ -83,9 +88,9 @@ function Game(props) {
                     >
                     
                     
-                            {
-                                
-                                cardkeys.slice(mycardnumber,mycardnumber+6).map((card)=><Card key={card.key} width='20%'  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)}
+                            {   
+                                cardkeys.slice(mycardnumber,mycardnumber+6).map((card)=><Card key={card.key} width='20%'  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)
+                            }
                     
                     
                     </ScrollView>

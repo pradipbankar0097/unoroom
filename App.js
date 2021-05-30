@@ -14,13 +14,14 @@ import { firebaseConfig } from './config';
 
 import Game from './screens/Game';
 // temp
-import Card from './assets/components/Card'
+import Card from './assets/Card'
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 firebase.initializeApp(firebaseConfig);
 export var db = firebase.database();
 export var myname ;
 export var mycardnumber=0;
+export var roomCodeToExport ;
 var mycardnumberset = false;
 function setmycardnumber(v) {
   if(myname!=v && !mycardnumberset){
@@ -138,7 +139,10 @@ var room = db.ref(route.params.roomCode);
 
      })
      metadataupdated=true;
-  
+  room.child('maincard/card').set({
+    cardcolor:'red',
+    cardnumber:'2'
+  })
   }
   }
 
@@ -162,6 +166,7 @@ var room = db.ref(route.params.roomCode);
       }
     }
   }
+  roomCodeToExport = roomCode;
   return (<View 
             style={
               {

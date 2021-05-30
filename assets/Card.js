@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes,{defaultProps} from 'prop-types'
-import {View,Text} from 'react-native'
+import {View,Text, Pressable} from 'react-native'
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/database";
+
+import {db,roomCodeToExport} from '../App'
 
 export default class Card extends Component {
     static propTypes = {
@@ -18,9 +24,9 @@ export default class Card extends Component {
     render() {
       
         return (
-            <View 
-      style={{
-        width:this.props.width,
+          <Pressable
+          style={{
+            width:this.props.width,
         height: this.props.height,
         backgroundColor:'white',
         borderRadius:10,
@@ -29,8 +35,18 @@ export default class Card extends Component {
         display:'flex',
         justifyContent:'center',
         alignItems:'center'
-      }}
-    >
+          }}
+            onPress={
+              ()=>
+              {
+                db.ref(roomCodeToExport+'/maincard/card').update({
+                  cardcolor:this.props.cardcolor,
+                  cardnumber: this.props.cardnumber
+                })
+              }
+            }
+          >
+            
     <View
       style={{
         width:'100%',
@@ -75,7 +91,8 @@ export default class Card extends Component {
         }}
       >{this.props.cardnumber}</Text>
     </View>
-    </View>
+    
+    </Pressable>
         )
     }
 }
