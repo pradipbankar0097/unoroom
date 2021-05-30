@@ -175,9 +175,7 @@ var room = db.ref(route.params.roomCode);
 
     <Button 
       style={styles.normalbutton}
-     title="PLAY" onPress={()=>{navigation.navigate('Game', {  firebase: firebase, db: db,roomCode : roomCode })}
-     ,distributecards()
-     } />
+     title="PLAY" onPress={()=>{navigation.navigate('Game', {  firebase: firebase, db: db,roomCode : roomCode })}} />
     <Text>Members : </Text>
     <>
     {error && <Text>Error: {error}</Text>}

@@ -20,7 +20,7 @@ function Game(props) {
    var room = db.ref(props.roomCode)
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
    //const [cardsarray, loadingc, errorc] = useDocumentData(cards)
-   const [cardkeys, loadingcards, errorcards] = useList(room.child('playercards/'+myname+'/cards'))
+   const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
    
    
 
@@ -85,7 +85,7 @@ function Game(props) {
                     
                             {
                                 
-                                cardkeys.map((card)=><Card key={card.key} cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)}
+                                cardkeys.slice(mycardnumber,mycardnumber+6).map((card)=><Card key={card.key} width='20%'  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)}
                     
                     
                     </ScrollView>
