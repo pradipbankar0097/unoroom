@@ -10,15 +10,15 @@ import { useList } from 'react-firebase-hooks/database';
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Card from '../assets/components/Card'
 import { firebaseConfig } from '../config';
-import {db} from '../App'
+import {db,myname} from '../App'
+
 function Game(props) {
 
    var store = firebase.firestore()
-
    var room = db.ref(props.roomCode)
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
    //const [cardsarray, loadingc, errorc] = useDocumentData(cards)
-   const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
+   const [cardkeys, loadingcards, errorcards] = useList(room.child('playercards/'+myname+'/cards'))
    
    
 
@@ -81,7 +81,7 @@ function Game(props) {
                     >
                     
                     
-                            {console.log(cardkeys),
+                            {console.log(room.child(`playercards/${myname}/cards`).toJSON()),
                                 cardkeys.map((card)=><Card key={card.key} cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)}
                     
                     
@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
 Game.propTypes = {
         firebase: PropTypes.instanceOf(firebase),
         db : PropTypes.instanceOf(firebase.database.Database),
-        roomCode : PropTypes.string
+        roomCode : PropTypes.string,
+        
     }
 
 export default Game

@@ -19,7 +19,7 @@ import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 firebase.initializeApp(firebaseConfig);
 export var db = firebase.database();
-
+export var myname ;
 var roomcodetopass ;
 const HomeScreen = ({ navigation }) => {
   let [roomCode, setRoomCode] = useState('');
@@ -67,10 +67,10 @@ const ProfileScreen = ({ navigation, route }) => {
   var room = db.ref(route.params.roomCode);
   var roomCode = route.params.roomCode.toString();
   var member = room.child('members/'+route.params.name);
-  member.set({
+  member.child('status').set({
     present:true
   })
-  
+  myname = route.params.name;
   //if the logged in user is creator
   if(route.params.owner == true){
     
@@ -157,7 +157,7 @@ var room = db.ref(route.params.roomCode);
 
     <Button 
       style={styles.normalbutton}
-     title="PLAY" onPress={()=>{navigation.navigate('Game', { firebase: firebase, db: db,roomCode : roomCode})}} />
+     title="PLAY" onPress={()=>{navigation.navigate('Game', {  firebase: firebase, db: db,roomCode : roomCode })}} />
     <Text>Members : </Text>
     <>
     {error && <Text>Error: {error}</Text>}
