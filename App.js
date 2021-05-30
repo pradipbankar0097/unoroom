@@ -9,7 +9,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
-import { useListKeys } from 'react-firebase-hooks/database';
+import { useListKeys , useList} from 'react-firebase-hooks/database';
 import { firebaseConfig } from './config';
 
 import Game from './screens/Game';
@@ -20,6 +20,17 @@ import { withSafeAreaInsets } from 'react-native-safe-area-context';
 firebase.initializeApp(firebaseConfig);
 export var db = firebase.database();
 export var myname ;
+export var mycardnumber=0;
+var mycardnumberset = false;
+function setmycardnumber(v) {
+  if(myname!=v && !mycardnumberset){
+    mycardnumber+=6
+  }
+  else{
+    mycardnumberset=true;
+  }
+}
+
 var roomcodetopass ;
 const HomeScreen = ({ navigation }) => {
   let [roomCode, setRoomCode] = useState('');
@@ -143,7 +154,14 @@ var room = db.ref(route.params.roomCode);
     }
   }
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
-  
+  const [cards, loadingcards, errorcards] = useList(room.child('cards'))
+  function distrubutecards() {
+    for (let i = 0; i < playerkeys.length; i++) {
+      if(playerkeys[i]==myname){
+        mycardnumber = 6*i;
+      }
+    }
+  }
   return (<View 
             style={
               {
@@ -157,7 +175,9 @@ var room = db.ref(route.params.roomCode);
 
     <Button 
       style={styles.normalbutton}
-     title="PLAY" onPress={()=>{navigation.navigate('Game', {  firebase: firebase, db: db,roomCode : roomCode })}} />
+     title="PLAY" onPress={()=>{navigation.navigate('Game', {  firebase: firebase, db: db,roomCode : roomCode })}
+     ,distributecards()
+     } />
     <Text>Members : </Text>
     <>
     {error && <Text>Error: {error}</Text>}
@@ -166,6 +186,7 @@ var room = db.ref(route.params.roomCode);
           
             <ScrollView>
               {playerkeys.map((v) => (
+                setmycardnumber(v),
                 <View key={v} 
                 style={{
                   padding:10,

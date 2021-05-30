@@ -10,7 +10,9 @@ import { useList } from 'react-firebase-hooks/database';
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Card from '../assets/components/Card'
 import { firebaseConfig } from '../config';
-import {db,myname} from '../App'
+import {db,myname,mycardnumber} from '../App'
+
+var currentcardnumber=0;
 
 function Game(props) {
 
@@ -81,7 +83,8 @@ function Game(props) {
                     >
                     
                     
-                            {console.log(room.child(`playercards/${myname}/cards`).toJSON()),
+                            {
+                                
                                 cardkeys.map((card)=><Card key={card.key} cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)}
                     
                     
