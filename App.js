@@ -22,6 +22,8 @@ export var db = firebase.database();
 export var myname ;
 export var mycardnumber=0;
 export var roomCodeToExport ;
+export let deck = [];
+
 var mycardnumberset = false;
 function setmycardnumber(v) {
   if(myname!=v && !mycardnumberset){
@@ -91,7 +93,7 @@ const ProfileScreen = ({ navigation, route }) => {
 // program to shuffle the deck of cards
 const suits = ["red", "blue", "green", "yellow"];
 const values = ["1","2","3","4","5","6","7","8","9","🚫","🔁","+2","+4",];
-let deck = [];
+
 for (let i = 0; i < suits.length; i++) {
     for (let x = 0; x < values.length; x++) {
         let card = { cardnumber: values[x], cardcolor: suits[i] };

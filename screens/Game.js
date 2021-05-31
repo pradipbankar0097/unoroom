@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import {View,Text,StyleSheet, ScrollView} from 'react-native'
 import firebase from "firebase/app";
@@ -10,7 +10,7 @@ import { useList } from 'react-firebase-hooks/database';
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Card from '../assets/Card'
 import { firebaseConfig } from '../config';
-import {db,myname,mycardnumber} from '../App'
+import {db,myname,mycardnumber,deck} from '../App'
 
 var currentcardnumber=0;
 
@@ -22,8 +22,8 @@ function Game(props) {
    //const [cardsarray, loadingc, errorc] = useDocumentData(cards)
    const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
    const [maincard,loadingmaincard,errormaincard] = useObject(room.child('maincard/card'))
-   
-
+   const [myCurrentCards, setMyCurrentCards] = useState(deck)
+    
         return (
             <View
                 style={
@@ -89,7 +89,7 @@ function Game(props) {
                     
                     
                             {   
-                                cardkeys.slice(mycardnumber,mycardnumber+6).map((card)=><Card key={card.key} width='20%'  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)
+                                deck.slice(mycardnumber,mycardnumber+6).map((card)=><Card key={card.cardcolor+card.cardnumber} width='20%'  cardcolor={card.cardcolor} cardnumber={card.cardnumber} />)
                             }
                     
                     
