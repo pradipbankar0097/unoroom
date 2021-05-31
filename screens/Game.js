@@ -16,13 +16,13 @@ var currentcardnumber=0;
 
 function Game(props) {
 
-   var store = firebase.firestore()
+   //var store = firebase.firestore()
    var room = db.ref(props.roomCode)
    const [playerkeys, loading, error] = useListKeys(room.child('members'))
    //const [cardsarray, loadingc, errorc] = useDocumentData(cards)
-   const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
+   //const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
    const [maincard,loadingmaincard,errormaincard] = useObject(room.child('maincard/card'))
-   const [myCurrentCards, setMyCurrentCards] = useState(deck)
+   const [myCurrentCards, loadingMyCurrentCards, errorMyCurrentCards] = useList(room.child('playercards/'+myname+'/cards'))
     
         return (
             <View
@@ -89,7 +89,7 @@ function Game(props) {
                     
                     
                             {   
-                                deck.slice(mycardnumber,mycardnumber+6).map((card)=><Card key={card.cardcolor+card.cardnumber} width='20%'  cardcolor={card.cardcolor} cardnumber={card.cardnumber} />)
+                                myCurrentCards.map((card)=><Card key={card.key} width='20%' cardkey={card.key}  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)
                             }
                     
                     

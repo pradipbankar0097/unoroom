@@ -6,7 +6,9 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
 
-import {db,roomCodeToExport} from '../App'
+import {db,myname,roomCodeToExport} from '../App'
+
+//var mycardsref = db.ref(roomCodeToExport+'/playercards/'+myname+'/cards')
 
 export default class Card extends Component {
     static propTypes = {
@@ -14,7 +16,7 @@ export default class Card extends Component {
         width: PropTypes.string,
         cardcolor: PropTypes.string,
         cardnumber: PropTypes.string,
-        
+        cardkey: PropTypes.string
     }
     static defaultProps ={
       cardcolor : 'red',
@@ -42,7 +44,13 @@ export default class Card extends Component {
                 db.ref(roomCodeToExport+'/maincard/card').update({
                   cardcolor:this.props.cardcolor,
                   cardnumber: this.props.cardnumber
-                })
+                }),
+                db.ref(roomCodeToExport+'/playercards/'+myname+'/cards/'+this.props.cardkey).remove().then(function() {
+    console.log("Remove succeeded.")
+  })
+  .catch(function(error) {
+    console.log("Remove failed: " + error.message)
+  })
               }
             }
           >

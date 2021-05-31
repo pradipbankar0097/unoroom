@@ -34,11 +34,21 @@ function setmycardnumber(v) {
   }
 }
 
-var roomcodetopass ;
+function distributecards(playerkeys){
+  for (let i = 0; i < playerkeys.length; i++) {
+    for (let j = 0; j < 6; j++) {
+      db.ref(roomCodeToExport+'/playercards/'+playerkeys[i]+'/cards/'+(i*6+j)).set(deck[i*6+j])
+      
+    }
+    
+  }
+}
+
+
 const HomeScreen = ({ navigation }) => {
   let [roomCode, setRoomCode] = useState('');
   let [user, setUser] = useState('');
-  roomcodetopass = roomCode;
+  roomCodeToExport = roomCode;
   return (
     <View style={styles.container}>
 
@@ -192,6 +202,7 @@ var room = db.ref(route.params.roomCode);
             <ScrollView>
               {playerkeys.map((v) => (
                 setmycardnumber(v),
+                distributecards(playerkeys),
                 <View key={v} 
                 style={{
                   padding:10,
