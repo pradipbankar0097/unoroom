@@ -23,6 +23,7 @@ export var myname ;
 export var mycardnumber=0;
 export var roomCodeToExport ;
 export let deck = [];
+export var amiowner = false;
 
 var mycardnumberset = false;
 function setmycardnumber(v) {
@@ -35,6 +36,7 @@ function setmycardnumber(v) {
 }
 
 function distributecards(playerkeys){
+  if(amiowner){
   for (let i = 0; i < playerkeys.length; i++) {
     for (let j = 0; j < 6; j++) {
       db.ref(roomCodeToExport+'/playercards/'+playerkeys[i]+'/cards/'+(i*6+j)).set(deck[i*6+j])
@@ -42,6 +44,7 @@ function distributecards(playerkeys){
     }
     
   }
+}
 }
 
 
@@ -97,7 +100,7 @@ const ProfileScreen = ({ navigation, route }) => {
   myname = route.params.name;
   //if the logged in user is creator
   if(route.params.owner == true){
-    
+    amiowner = true;
     if(!metadataupdated){
 
 // program to shuffle the deck of cards

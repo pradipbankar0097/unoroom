@@ -71,7 +71,7 @@ function Game(props) {
                     <View>
                     {errormaincard && <strong>Error: {error}</strong>}
                     {loadingmaincard && <span>Card Loading...</span>}
-                    {maincard && <Card height='90%' cardcolor={maincard.val()['cardcolor']} cardnumber={maincard.val()['cardnumber']} />}
+                    {maincard && <Card width='14vh' height='20vh' cardcolor={maincard.val()['cardcolor']} cardnumber={maincard.val()['cardnumber']} />}
                     
                     </View>
                 </View>
@@ -89,7 +89,7 @@ function Game(props) {
                     
                     
                             {   
-                                myCurrentCards.map((card)=><Card key={card.key} width='20%' cardkey={card.key}  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)
+                                myCurrentCards.map((card)=><Card key={card.key} width='14vh' height='20vh' cardkey={card.key}  cardcolor={card.val()['cardcolor']} cardnumber={card.val()['cardnumber']} />)
                             }
                     
                     
