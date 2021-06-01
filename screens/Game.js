@@ -23,7 +23,7 @@ function Game(props) {
    //const [cardkeys, loadingcards, errorcards] = useList(room.child('cards'))
    const [maincard,loadingmaincard,errormaincard] = useObject(room.child('maincard/card'))
    const [myCurrentCards, loadingMyCurrentCards, errorMyCurrentCards] = useList(room.child('playercards/'+myname+'/cards'))
-    
+   
         return (
             <View
                 style={

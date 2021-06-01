@@ -18,12 +18,17 @@ import Card from './assets/Card'
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 firebase.initializeApp(firebaseConfig);
+
 export var db = firebase.database();
 export var myname ;
 export var mycardnumber=0;
 export var roomCodeToExport ;
 export let deck = [];
 export var amiowner = false;
+export var previousToMe;
+export var nextToMe;
+export var playersarray=[];
+
 
 var mycardnumberset = false;
 function setmycardnumber(v) {
@@ -35,7 +40,25 @@ function setmycardnumber(v) {
   }
 }
 
+function setPreviousNext() {
+  var myindex = playersarray.indexOf(myname)
+  if(myindex==0){
+    previousToMe = playersarray[playersarray.length-1];
+  }
+  else{
+    previousToMe = playersarray[myindex-1]
+  }
+  if(myindex==(playersarray.length-1)){
+    nextToMe = playersarray[0]
+  }
+  else{
+    nextToMe = playersarray[myindex+1]
+  }
+}
+
 function distributecards(playerkeys){
+  playersarray = playerkeys;
+  setPreviousNext();
   if(amiowner){
   for (let i = 0; i < playerkeys.length; i++) {
     for (let j = 0; j < 6; j++) {

@@ -6,9 +6,25 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
 
-import {db,myname,roomCodeToExport} from '../App'
-
+import { db, myname, deck, roomCodeToExport, previousToMe, nextToMe } from "../App";
+var nextCardNumberToPick = '103';
 //var mycardsref = db.ref(roomCodeToExport+'/playercards/'+myname+'/cards')
+function updateMyNext(cardnumber) {
+  if(cardnumber=='+2'){
+    console.log('+2 occurred')
+    db.ref(roomCodeToExport+'/playercards/'+nextToMe+'/cards/'+(nextCardNumberToPick--)).update(deck[nextCardNumberToPick]);
+    db.ref(roomCodeToExport+'/playercards/'+nextToMe+'/cards/'+(nextCardNumberToPick--)).update(deck[nextCardNumberToPick]);
+    
+  }
+  if(cardnumber=='+4'){
+    console.log('+4 occurred')
+    db.ref(roomCodeToExport+'/playercards/'+nextToMe+'/cards/'+(nextCardNumberToPick--)).update(deck[nextCardNumberToPick]);
+    db.ref(roomCodeToExport+'/playercards/'+nextToMe+'/cards/'+(nextCardNumberToPick--)).update(deck[nextCardNumberToPick]);
+    db.ref(roomCodeToExport+'/playercards/'+nextToMe+'/cards/'+(nextCardNumberToPick--)).update(deck[nextCardNumberToPick]);
+    db.ref(roomCodeToExport+'/playercards/'+nextToMe+'/cards/'+(nextCardNumberToPick--)).update(deck[nextCardNumberToPick]);
+    
+  }
+}
 
 export default class Card extends Component {
     static propTypes = {
@@ -50,7 +66,8 @@ export default class Card extends Component {
   })
   .catch(function(error) {
     console.log("Remove failed: " + error.message)
-  })
+  }),
+  updateMyNext(this.props.cardnumber)
               }
             }
           >
