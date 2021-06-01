@@ -185,7 +185,14 @@ var room = db.ref(route.params.roomCode);
   }
 
   else{
-    
+    const [cardkeys, loadingcards, errorcards] = useList(db.ref(roomCodeToExport).child('cards'))
+    if(!loadingcards && cardkeys){
+      cardkeys.map((card)=>{deck.push({
+        cardnumber:card.val()['cardnumber'],
+        cardcolor: card.val()['cardcolor']
+      })
+      })
+    }
     if(!metadataupdated){
     console.log('in else')
     room.child('metadata').update({
@@ -196,14 +203,7 @@ var room = db.ref(route.params.roomCode);
     }
   }
   const [playerkeys, loading, error] = useListKeys(room.child('members'));
-  const [cards, loadingcards, errorcards] = useList(room.child('cards'))
-  function distrubutecards() {
-    for (let i = 0; i < playerkeys.length; i++) {
-      if(playerkeys[i]==myname){
-        mycardnumber = 6*i;
-      }
-    }
-  }
+  
   roomCodeToExport = roomCode;
   return (<View 
             style={
